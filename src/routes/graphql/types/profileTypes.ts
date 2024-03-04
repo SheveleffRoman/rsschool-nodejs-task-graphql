@@ -1,6 +1,12 @@
-import { GraphQLBoolean, GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';
+import {
+  GraphQLBoolean,
+  GraphQLInputObjectType,
+  GraphQLInt,
+  GraphQLNonNull,
+  GraphQLObjectType,
+} from 'graphql';
 import { UUIDType } from './uuidTypes.js';
-import { memberType } from './memberTypes.js';
+import { memberType, memberTypeIdEnum } from './memberTypes.js';
 import { PrismaAppData, MissedArgs } from '../interfaces/app.interface.js';
 import { userType } from './userTypes.js';
 import { Profile } from '@prisma/client';
@@ -26,4 +32,23 @@ export const profileType = new GraphQLObjectType({
         userLoader.load(source.userId),
     },
   }),
+});
+
+export const createProfileInputType = new GraphQLInputObjectType({
+  name: 'CreateProfileInput',
+  fields: {
+    isMale: { type: new GraphQLNonNull(GraphQLBoolean) },
+    yearOfBirth: { type: new GraphQLNonNull(GraphQLInt) },
+    memberTypeId: { type: new GraphQLNonNull(memberTypeIdEnum) },
+    userId: { type: new GraphQLNonNull(UUIDType) },
+  },
+});
+
+export const changeProfileInputType = new GraphQLInputObjectType({
+  name: 'ChangeProfileInput',
+  fields: {
+    isMale: { type: GraphQLBoolean },
+    yearOfBirth: { type: GraphQLInt },
+    memberTypeId: { type: memberTypeIdEnum },
+  },
 });
